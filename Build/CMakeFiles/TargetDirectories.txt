@@ -1,0 +1,3 @@
+/Users/Minty/Desktop/VPN/Build/CMakeFiles/VPN.dir
+/Users/Minty/Desktop/VPN/Build/CMakeFiles/edit_cache.dir
+/Users/Minty/Desktop/VPN/Build/CMakeFiles/rebuild_cache.dir
