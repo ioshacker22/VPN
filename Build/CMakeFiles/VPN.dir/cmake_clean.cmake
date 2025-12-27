@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/VPN.dir/SRC/main.cpp.o"
-  "CMakeFiles/VPN.dir/SRC/main.cpp.o.d"
+  "CMakeFiles/VPN.dir/SRC/simple_server.cpp.o"
+  "CMakeFiles/VPN.dir/SRC/simple_server.cpp.o.d"
   "VPN"
   "VPN.pdb"
 )

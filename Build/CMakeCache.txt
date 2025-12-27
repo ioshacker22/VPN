@@ -235,7 +235,7 @@ OPENSSL_SSL_LIBRARY:FILEPATH=/usr/local/lib/libssl.dylib
 PKG_CONFIG_ARGN:STRING=
 
 //pkg-config executable
-PKG_CONFIG_EXECUTABLE:FILEPATH=/usr/local/bin/pkg-config
+PKG_CONFIG_EXECUTABLE:FILEPATH=PKG_CONFIG_EXECUTABLE-NOTFOUND
 
 //Value Computed by CMake
 VPN_BINARY_DIR:STATIC=/Users/Minty/Desktop/VPN/Build

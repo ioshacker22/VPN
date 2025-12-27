@@ -129,29 +129,29 @@ VPN/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/VPN.dir/build.make CMakeFiles/VPN.dir/build
 .PHONY : VPN/fast
 
-SRC/main.o: SRC/main.cpp.o
-.PHONY : SRC/main.o
+SRC/simple_server.o: SRC/simple_server.cpp.o
+.PHONY : SRC/simple_server.o
 
 # target to build an object file
-SRC/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VPN.dir/build.make CMakeFiles/VPN.dir/SRC/main.cpp.o
-.PHONY : SRC/main.cpp.o
+SRC/simple_server.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VPN.dir/build.make CMakeFiles/VPN.dir/SRC/simple_server.cpp.o
+.PHONY : SRC/simple_server.cpp.o
 
-SRC/main.i: SRC/main.cpp.i
-.PHONY : SRC/main.i
+SRC/simple_server.i: SRC/simple_server.cpp.i
+.PHONY : SRC/simple_server.i
 
 # target to preprocess a source file
-SRC/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VPN.dir/build.make CMakeFiles/VPN.dir/SRC/main.cpp.i
-.PHONY : SRC/main.cpp.i
+SRC/simple_server.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VPN.dir/build.make CMakeFiles/VPN.dir/SRC/simple_server.cpp.i
+.PHONY : SRC/simple_server.cpp.i
 
-SRC/main.s: SRC/main.cpp.s
-.PHONY : SRC/main.s
+SRC/simple_server.s: SRC/simple_server.cpp.s
+.PHONY : SRC/simple_server.s
 
 # target to generate assembly for a file
-SRC/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/VPN.dir/build.make CMakeFiles/VPN.dir/SRC/main.cpp.s
-.PHONY : SRC/main.cpp.s
+SRC/simple_server.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/VPN.dir/build.make CMakeFiles/VPN.dir/SRC/simple_server.cpp.s
+.PHONY : SRC/simple_server.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... VPN"
-	@echo "... SRC/main.o"
-	@echo "... SRC/main.i"
-	@echo "... SRC/main.s"
+	@echo "... SRC/simple_server.o"
+	@echo "... SRC/simple_server.i"
+	@echo "... SRC/simple_server.s"
 .PHONY : help
 
 

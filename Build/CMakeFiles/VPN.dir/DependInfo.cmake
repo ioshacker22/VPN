@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/Users/Minty/Desktop/VPN/SRC/main.cpp" "CMakeFiles/VPN.dir/SRC/main.cpp.o" "gcc" "CMakeFiles/VPN.dir/SRC/main.cpp.o.d"
+  "/Users/Minty/Desktop/VPN/SRC/simple_server.cpp" "CMakeFiles/VPN.dir/SRC/simple_server.cpp.o" "gcc" "CMakeFiles/VPN.dir/SRC/simple_server.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

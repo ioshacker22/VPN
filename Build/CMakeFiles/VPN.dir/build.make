@@ -72,28 +72,28 @@ include CMakeFiles/VPN.dir/flags.make
 CMakeFiles/VPN.dir/codegen:
 .PHONY : CMakeFiles/VPN.dir/codegen
 
-CMakeFiles/VPN.dir/SRC/main.cpp.o: CMakeFiles/VPN.dir/flags.make
-CMakeFiles/VPN.dir/SRC/main.cpp.o: /Users/Minty/Desktop/VPN/SRC/main.cpp
-CMakeFiles/VPN.dir/SRC/main.cpp.o: CMakeFiles/VPN.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/Minty/Desktop/VPN/Build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/VPN.dir/SRC/main.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/VPN.dir/SRC/main.cpp.o -MF CMakeFiles/VPN.dir/SRC/main.cpp.o.d -o CMakeFiles/VPN.dir/SRC/main.cpp.o -c /Users/Minty/Desktop/VPN/SRC/main.cpp
+CMakeFiles/VPN.dir/SRC/simple_server.cpp.o: CMakeFiles/VPN.dir/flags.make
+CMakeFiles/VPN.dir/SRC/simple_server.cpp.o: /Users/Minty/Desktop/VPN/SRC/simple_server.cpp
+CMakeFiles/VPN.dir/SRC/simple_server.cpp.o: CMakeFiles/VPN.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/Minty/Desktop/VPN/Build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/VPN.dir/SRC/simple_server.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/VPN.dir/SRC/simple_server.cpp.o -MF CMakeFiles/VPN.dir/SRC/simple_server.cpp.o.d -o CMakeFiles/VPN.dir/SRC/simple_server.cpp.o -c /Users/Minty/Desktop/VPN/SRC/simple_server.cpp
 
-CMakeFiles/VPN.dir/SRC/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/VPN.dir/SRC/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Minty/Desktop/VPN/SRC/main.cpp > CMakeFiles/VPN.dir/SRC/main.cpp.i
+CMakeFiles/VPN.dir/SRC/simple_server.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/VPN.dir/SRC/simple_server.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/Minty/Desktop/VPN/SRC/simple_server.cpp > CMakeFiles/VPN.dir/SRC/simple_server.cpp.i
 
-CMakeFiles/VPN.dir/SRC/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/VPN.dir/SRC/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Minty/Desktop/VPN/SRC/main.cpp -o CMakeFiles/VPN.dir/SRC/main.cpp.s
+CMakeFiles/VPN.dir/SRC/simple_server.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/VPN.dir/SRC/simple_server.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/Minty/Desktop/VPN/SRC/simple_server.cpp -o CMakeFiles/VPN.dir/SRC/simple_server.cpp.s
 
 # Object files for target VPN
 VPN_OBJECTS = \
-"CMakeFiles/VPN.dir/SRC/main.cpp.o"
+"CMakeFiles/VPN.dir/SRC/simple_server.cpp.o"
 
 # External object files for target VPN
 VPN_EXTERNAL_OBJECTS =
 
-VPN: CMakeFiles/VPN.dir/SRC/main.cpp.o
+VPN: CMakeFiles/VPN.dir/SRC/simple_server.cpp.o
 VPN: CMakeFiles/VPN.dir/build.make
 VPN: /usr/local/lib/libssl.dylib
 VPN: /usr/local/lib/libcrypto.dylib
