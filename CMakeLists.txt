@@ -8,11 +8,11 @@ find_package(Boost REQUIRED)
 
 
 add_executable(VPN
-    SRC/main.cpp
+    SRC/simple_server.cpp
 )
 
 
 target_link_libraries(VPN
     PRIVATE OpenSSL::SSL
     PRIVATE OpenSSL::Crypto
-)
+) 
