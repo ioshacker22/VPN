@@ -1,0 +1,21 @@
+/*
+
+Create socket
+Setup server address structure
+Connect to server
+Send message
+Receive response
+Print response
+Close socket
+int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+
+
+
+
+
+
+
+
+
+
+*/

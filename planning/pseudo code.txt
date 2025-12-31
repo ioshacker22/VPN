@@ -1,0 +1,94 @@
+/* cpp 
+
+
+Phase 0: Learn basic socket programming
+Phase 1: Create a simple TCP client-server chat application 
+Phase 2: Add encryption to your chat app
+Phase 3: Learn TUN/TAP device basics
+ Phase 4: Build the actual VPN functionality 
+Phase 5: Add web interface and authentication Phase 6: Harden security and add rate limiting
+1.
+create socket;
+declare
+ int serverSocket, int socket(int domain, int type, int protocol); //create a new socket and return
+file descriptor
+call: serverSocket= socket(AF_INET, SOCK_STREAM, 0)
+if (serverSocket < 0)
+print "socket creation failed"
+exit program.
+
+2.
+store socket address + port 
+call struct sockaddr_in addr;
+memset(&addr, 0, sizeof(addr));
+sockaddr.sin_family = AF_INET;
+sockaddr.sin_port = htons(8080);
+sockaddr.sin_addr.s_addr = INADDR_ANY;
+
+
+3.
+// Bind socket to address
+int bindResult = bind(serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
+if (bindResult < 0) {
+    print "Bind failed"
+    exit program
+}
+
+
+d.
+mark socket as listening
+call listn()
+
+int listen = listen(serverSocket, 5);
+if(listen < 0){
+print "listen failed"
+exit program
+}
+
+e.
+accept connection 
+call accept()
+//accept incoming connection and return a new socket descriptor
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
+if it fails handle error 
+
+int accept = accept(serverSocket, NULL, NULL);
+if(accept < 0){
+print "Failed acceptance"
+exit program
+}
+
+f.
+receive data 
+call recv()
+receive  data from connected socket
+ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+if it fails, handle error 
+
+char buffer[1024];
+ssize_t receive = recv(clientSocket, buffer, sizeof(buffer), 0);
+if(receive < 0){
+print "Failed receive"
+exit ptogram
+}
+
+g.
+send data
+call send()
+//send data to connected socket//
+ssize_t send(int sockfd, const void *buf, size_t len, int flags);
+if it fails, handle error
+
+ssize_t BytesSent = send(clientSocket, buffer, receive, 0);
+if(BytesSent < 0){
+print "failed send"
+exit program
+}
+
+h.
+close socket
+call close()
+
+close(clientSocket);
+close(serverSocket);
+*/
