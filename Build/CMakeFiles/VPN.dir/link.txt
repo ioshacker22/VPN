@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/VPN.dir/SRC/simple_server.cpp.o -o VPN  /usr/local/lib/libssl.dylib /usr/local/lib/libcrypto.dylib

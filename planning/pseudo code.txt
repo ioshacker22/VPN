@@ -1,94 +1,289 @@
-/* cpp 
+Assignment #2: Secure VPN Application
+
+In this assignment, you will design and implement a rudimentary Virtual Private Network (VPN) application.
+The VPN will allow a client to securely connect to a server, authenticate, establish an encrypted tunnel, and exchange data safely over an untrusted network.
+
+The application will be modular, extensible, and designed using object-oriented principles, templates, and composition, similar to a real-world VPN architecture.
+
+Submission Policy
+
+The assignment should contain only work done by you this term or code provided by your professor.
+
+Work done in another term, copied from online sources, or received from another student without citation is considered plagiarism and violates the Academic Integrity Policy.
+
+Every file submitted must contain a comment at the top with:
+
+Your name
+
+Seneca email
+
+Seneca Student ID
+
+Date of completion
+
+If the file contains only your own work, include:
+
+I declare that this submission is the result of my own work and I only copied the code that my professor provided to complete my assignments. This submitted piece of work has not been shared with any other student or 3rd party content provider.
 
 
-Phase 0: Learn basic socket programming
-Phase 1: Create a simple TCP client-server chat application 
-Phase 2: Add encryption to your chat app
-Phase 3: Learn TUN/TAP device basics
- Phase 4: Build the actual VPN functionality 
-Phase 5: Add web interface and authentication Phase 6: Harden security and add rate limiting
-1.
-create socket;
-declare
- int serverSocket, int socket(int domain, int type, int protocol); //create a new socket and return
-file descriptor
-call: serverSocket= socket(AF_INET, SOCK_STREAM, 0)
-if (serverSocket < 0)
-print "socket creation failed"
-exit program.
+If the file contains external help, clearly document:
 
-2.
-store socket address + port 
-call struct sockaddr_in addr;
-memset(&addr, 0, sizeof(addr));
-sockaddr.sin_family = AF_INET;
-sockaddr.sin_port = htons(8080);
-sockaddr.sin_addr.s_addr = INADDR_ANY;
+Which parts
+
+Who helped
+
+The source used
+
+Compiling and Testing Your Program
+
+All code must compile on matrix using:
+
+/usr/local/gcc/10.2.0/bin/g++ -Wall -std=c++17 -g -o vpn file1.cpp file2.cpp ...
 
 
-3.
-// Bind socket to address
-int bindResult = bind(serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
-if (bindResult < 0) {
-    print "Bind failed"
-    exit program
-}
+After compiling, check for memory leaks:
+
+valgrind --show-error-list=yes --leak-check=full --show-leak-kinds=all --track-origins=yes vpn
 
 
-d.
-mark socket as listening
-call listn()
+Use diff or an equivalent tool to compare outputs when required.
 
-int listen = listen(serverSocket, 5);
-if(listen < 0){
-print "listen failed"
-exit program
-}
+VPN Application Overview
 
-e.
-accept connection 
-call accept()
-//accept incoming connection and return a new socket descriptor
-int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
-if it fails handle error 
+This application simulates a secure VPN tunnel between a client and server.
 
-int accept = accept(serverSocket, NULL, NULL);
-if(accept < 0){
-print "Failed acceptance"
-exit program
-}
+The VPN supports:
 
-f.
-receive data 
-call recv()
-receive  data from connected socket
-ssize_t recv(int sockfd, void *buf, size_t len, int flags);
-if it fails, handle error 
+Authentication
 
-char buffer[1024];
-ssize_t receive = recv(clientSocket, buffer, sizeof(buffer), 0);
-if(receive < 0){
-print "Failed receive"
-exit ptogram
-}
+Encryption
 
-g.
-send data
-call send()
-//send data to connected socket//
-ssize_t send(int sockfd, const void *buf, size_t len, int flags);
-if it fails, handle error
+Secure data tunneling
 
-ssize_t BytesSent = send(clientSocket, buffer, receive, 0);
-if(BytesSent < 0){
-print "failed send"
-exit program
-}
+Multiple cipher and protocol strategies
 
-h.
-close socket
-call close()
+All global variables, functions, operator overloads, and types must be placed inside the seneca namespace.
 
-close(clientSocket);
-close(serverSocket);
-*/
+tester Module 
+
+Validates authentication flow
+
+Simulates encrypted traffic
+
+Verifies correct teardown
+
+Do not modify this module.
+Study the tester carefully.
+
+crypto Module 
+
+Implements cryptographic primitives:
+
+Key generation
+
+Encryption
+
+Decryption
+
+Supports multiple encryption strategies.
+
+Do not modify this module.
+
+socket Module 
+
+Handles:
+
+TCP/UDP socket abstraction
+
+Data transmission
+
+Connection lifecycle
+
+Do not modify this module.
+
+packet Module 
+
+Defines the structure of VPN packets:
+
+Headers
+
+Payload
+
+Integrity checks
+
+Do not modify this module.
+
+connection Module
+Defines the interface that all VPN connections must implement.
+
+Key virtual functions:
+
+connect()
+
+authenticate()
+
+sendData()
+
+receiveData()
+
+disconnect()
+
+ConnectionTpl Module
+
+Implement a templated class ConnectionTpl<T> derived from Connection.
+
+Template Parameters
+
+T: encryption strategy (e.g., AES, ChaCha)
+
+Private Members
+
+m_socket
+
+m_cipher
+
+m_isAuthenticated
+
+m_sessionKey
+
+Public Members
+
+Constructor initializing socket and encryption
+
+connect() override
+
+authenticate() override
+
+sendData(const std::string&)
+
+receiveData()
+
+disconnect()
+
+All data transmission must be encrypted using T.
+
+VPNClient Module
+
+Implement a concrete class VPNClient derived from ConnectionTpl<T>.
+
+Private Members
+
+m_username
+
+m_password
+
+Public Members
+
+Constructor accepting credentials
+
+authenticate() override:
+
+Sends credentials securely
+
+Validates server response
+
+clone() override
+
+VPNServer Module
+
+Implement a concrete class VPNServer.
+
+Private Members
+
+Dynamic array of active connections
+
+Authentication database
+
+Public Members
+
+Rule of 5
+
+acceptConnection(Connection*)
+
+removeConnection(const std::string&)
+
+broadcastEncryptedData(const std::string&)
+
+Tunnel Module
+
+Implements the secure data tunnel.
+
+Responsibilities
+
+Encapsulate encrypted packets
+
+Ensure integrity
+
+Manage session lifetime
+
+Public Members
+
+openTunnel()
+
+closeTunnel()
+
+sendPacket(Packet&)
+
+receivePacket()
+
+Protocol Module
+
+Implements VPN protocols (Strategy Pattern).
+
+Example protocols:
+
+OpenVPN-like
+
+WireGuard-like
+
+Each protocol defines:
+
+Handshake logic
+
+Rekeying strategy
+
+Keepalive behavior
+
+User Module
+
+Represents an authenticated VPN user.
+
+Private Members
+
+Username
+
+Access level
+
+Session state
+
+Public Members
+
+Login
+
+Logout
+
+Permission checks
+
+VPNManager Module
+
+High-level orchestrator.
+
+Responsibilities
+
+Start server
+
+Manage clients
+
+Enforce security policies
+
+Shutdown cleanly
+
+Sample Output
+[VPN] Server started
+[VPN] Client attempting connection...
+[AUTH] User authenticated
+[TUNNEL] Secure tunnel established
+[DATA] Encrypted packet sent
+[DATA] Encrypted packet received
+[TUNNEL] Tunnel closed
+[VPN] Client disconnected
