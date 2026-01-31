@@ -7,7 +7,7 @@ namespace seneca{
 
 template <typename T>
 class ConnectionTpl : public Connection{
-
+    protected:
     Socket m_socket;
     T m_cipher;
     bool m_isAuthenticated; 
