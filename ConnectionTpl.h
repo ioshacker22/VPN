@@ -11,7 +11,9 @@ class ConnectionTpl : public Connection{
     Socket m_socket;
     T m_cipher;
     bool m_isAuthenticated; 
+    bool m_isConnected;
     std::string m_sessionKey;
+    
 
     public: 
     // Default constructor: creates disconnected, unauthenticated connection
@@ -27,8 +29,7 @@ class ConnectionTpl : public Connection{
     void sendData(const std::string& )override;
     void receiveData() override;
     void disconnect()override;
-    ~ConnectionTpl()override;
-    Connection* clone()override ;
+
 };
 
 }
