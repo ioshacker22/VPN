@@ -16,6 +16,7 @@ namespace seneca{
         std::string username;
         std::string password;
         };
+        
         Credential* m_authDatabase; //dynamic array of valid credentials
         size_t m_authDatabaseSize; // Number of valid credentials
 
