@@ -15,6 +15,7 @@ class Connection{
     virtual void disconnect() = 0;
     virtual ~Connection() = 0;
     virtual Connection* clone() = 0;
+    virtual std::string getName()const = 0;
 
 };
 Connection::~Connection(){};

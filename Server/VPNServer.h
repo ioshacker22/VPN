@@ -25,13 +25,13 @@ namespace seneca{
 
         //Rule of 5
         VPNServer(const VPNServer& other);
-        VPNServer& operator=(const VPNServer& other);
+        VPNServer& operator=(const VPNServer& other);   
         ~VPNServer();
         VPNServer(VPNServer&& other);
         VPNServer& operator=(VPNServer&& other);
 
         //member functions
-        void acceptConnection(Connection* c);
+        void acceptConnection(Connection* c); //takes ownnership of connection*
         void removeConnection(const std::string& username);
         void broadcastEncryptedData(const std::string& data);
 

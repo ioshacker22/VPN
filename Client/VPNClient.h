@@ -16,12 +16,41 @@ namespace seneca{
 
         //override methods
         void authenticate()override;
-        seneca::Connection* clone()override;
-        ~VPNClient()override;
+        Connection* clone()override;
+        ~VPNClient()override = default;
+        std::string getName() const override;
 
 
     };
 
+    template <typename T>
+    VPNClient<T>::VPNClient(const std::string& username, const std::string& password) : ConnectionTpl<T> (), m_username(username), m_password(password){}
+
+    template <typename T>
+    void VPNClient<T>::authenticate(){
+        //secure connection
+        if(!this->m_isConnected){
+            return;
+        }
+
+        //authenticate
+        if(this->m_isAuthenticated){
+            return;
+        }
+
+        //send credentials
+        std::string credentials = m_username + ":" + m_password;
+       this->m_socket.sendData(credentials);
+
+       //delegate authentication
+       ConnectionTpl<T>::authenticate();
+    }
+
+    //clone copies configuration only
+    template <typename T>
+    Connection* VPNClient<T>::clone(){
+        return new VPNClient<T>(this->m_username, this->m_password);
+    }
 
 
 }

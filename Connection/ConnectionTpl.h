@@ -13,6 +13,7 @@ class ConnectionTpl : public Connection{
     bool m_isAuthenticated; 
     bool m_isConnected;
     std::string m_sessionKey;
+   
     
 
     public: 
@@ -29,6 +30,7 @@ class ConnectionTpl : public Connection{
     void sendData(const std::string& )override;
     void receiveData() override;
     void disconnect()override;
+
 
 };
 

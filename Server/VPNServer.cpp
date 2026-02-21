@@ -129,7 +129,58 @@ namespace seneca{
         return *this;
     }
 
+    
+    void VPNServer::acceptConnection(Connection* c){
+        if(c == nullptr){
+            return;
+        }
+        
+        // Resize if at capacity
+        if(m_size == m_capacity){
+            size_t newCapacity = m_capacity * 2;
+            Connection** newArray = new Connection*[newCapacity];
+            
+            // Copy existing connections
+            for(size_t i = 0; i < m_size; i++){
+                newArray[i] = m_connections[i];
+            }
+            
+            // Initialize remaining slots to nullptr
+            for(size_t i = m_size; i < newCapacity; i++){
+                newArray[i] = nullptr;
+            }
+            
+            // Replace old array
+            delete[] m_connections;
+            m_connections = newArray;
+            m_capacity = newCapacity;
+        }
+        
+        // Add the incoming connection
+        m_connections[m_size] = c;
+        m_size++;
+    }
 
+    void VPNServer::removeConnection(const std::string& username){
+        for(size_t i = 0; i < m_size; i++){
+
+            //downcast to VPNClient to access getName()
+            ConnectionTpl<AES>* client = dynamic_cast<ConnectionTpl<AES>*>(m_connections[i]);
+        
+            if(client != nullptr && client->getName() == username){
+                delete m_connections[i];
+
+                //shify connections after this one to the left
+                for(size_t j = i; j < m_size - 1; j++){
+                    m_connections[j] = m_connections[j+1];
+
+                }
+                m_connections[m_size -1] = nullptr;
+                m_size--;
+                return;  //stop afterremoving one connection
+            }
+        }
+    }
 
 
 
