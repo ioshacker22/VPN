@@ -19,6 +19,7 @@ namespace seneca{
         Connection* clone()override;
         ~VPNClient()override = default;
         std::string getName() const override;
+        Credentials buildCredentials() const override;
 
 
     };
@@ -52,12 +53,12 @@ namespace seneca{
         return new VPNClient<T>(this->m_username, this->m_password);
     }
 
+    //provvides credentials
+   template <typename T>
+    Credentials VPNClient<T>::buildCredentials() const {
+        return Credentials{ m_username, m_password};
     
-    template<typename T> 
-    std::string VPNClinet<T>::buildCredentials()const{
-        return m_username + ":" + m_password;
-    }
-
+}
 
 
 }

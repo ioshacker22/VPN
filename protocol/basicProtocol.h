@@ -4,6 +4,7 @@
 #include <string> 
 #include <optional>
 #include "protocol.h"
+#include "Credentials.h"
 
 namespace seneca{
 
@@ -11,7 +12,7 @@ namespace seneca{
         public:
        
         std::string createHandshake() const override;
-        virtual std::string createAuthMessage(const std::string& message) const override;
+        virtual std::string createAuthMessage(const Credentials& creds) const override;
 
         virtual std::optional<std::string> processAuthResponse(const std::string& response) const override;
 

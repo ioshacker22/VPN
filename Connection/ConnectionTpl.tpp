@@ -27,7 +27,7 @@ namespace seneca{
 
 
     template <typename T>
-    void ConnectionTpl<T>::authenticate(const std::string& authMessage) {
+    void ConnectionTpl<T>::authenticate() {
 
         // Guard: must be connected first
         if (!m_isConnected) {
@@ -39,16 +39,19 @@ namespace seneca{
             throw std::logic_error(getName() + ": already authenticated.");
         }
 
-        // Transport: send the auth message VPNClient built
-        m_socket.sendData(authMessage);
+        // Identity: ask derived class for credentials
+        Credentials creds = buildCredentials();
 
-        // Transport: receive server response
+        // Protocol: serialize credentials into wire format
+        std::string authMessage = m_protocol->createAuthMessage(creds);
+
+        // Transport: send and receive
+        m_socket.sendData(authMessage);
         std::string response = m_socket.receiveData();
 
-        // Protocol: validate and extract session key in one step
+        // Protocol: validate response and extract session key
         auto key = m_protocol->processAuthResponse(response);
 
-        // If nullopt  server rejected or response was malformed
         if (!key) {
             throw std::runtime_error(getName() + ": authentication failed or malformed response.");
         }
@@ -56,7 +59,7 @@ namespace seneca{
         // Cipher: configure with server-provided key
         m_cipher.setKey(*key);
 
-        // Commit state atomically all three together or not at all
+        // Commit state atomically
         m_sessionKey      = *key;
         m_isAuthenticated = true;
     }

@@ -3,6 +3,7 @@
 #include "Socket.h"
 #include <memory>
 #include "Protocol.h"
+#include "Credentials.h"
 
 
 namespace seneca{
@@ -19,7 +20,7 @@ class ConnectionTpl : public Connection{
     std::unique_ptr<Protocol> m_protocol;
 
     protected: 
-    virtual std::string buildCredentials() const = 0;
+    virtual Credentials buildCredentials() const = 0;
    
     
 

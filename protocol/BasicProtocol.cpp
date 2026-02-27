@@ -8,8 +8,8 @@ namespace seneca{
   }  
 
   //ormats outgoing auth payload
-  std::string BasicProtocol::createAuthMessage(const std::string& message) const{
-    return "AUTH:" + message;
+  std::string BasicProtocol::createAuthMessage(const Credentials& creds) const{
+    return "AUTH:" + creds.username + ":" + creds.password;
   }
 
  
