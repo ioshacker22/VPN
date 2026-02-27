@@ -9,7 +9,7 @@ class Connection{
 
     public: 
     virtual void connect() =0;
-    virtual void authenticate() = 0;
+    virtual void authenticate(const std::string& authMessage) = 0;
     virtual void sendData(const std::string& ) = 0;
     virtual void receiveData() = 0;
     virtual void disconnect() = 0;

@@ -2,6 +2,7 @@
 #define SENECA_BASICPROTOCOL_H
 
 #include <string> 
+#include <optional>
 #include "protocol.h"
 
 namespace seneca{
@@ -11,8 +12,9 @@ namespace seneca{
        
         std::string createHandshake() const override;
         virtual std::string createAuthMessage(const std::string& message) const override;
-        virtual bool validateAuthMessage(const std::string& message) const override;
-        virtual std::string createSessionKey() const override;
+
+        virtual std::optional<std::string> processAuthResponse(const std::string& response) const override;
+
         virtual ~BasicProtocol()=default;
 
     };

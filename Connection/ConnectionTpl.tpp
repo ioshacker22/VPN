@@ -3,10 +3,11 @@
 #include <string>
 #include <iostream> 
 
+
 namespace seneca{
 
     template <typename T>
-    ConnectionTpl<T>::ConnectionTpl() : m_socket(), m_cipher(), m_isAuthenticated(false), m_isConnected(false), m_sessionKey(){}
+    ConnectionTpl<T>::ConnectionTpl(std::unique_ptr<Protocol>protocol) : m_socket(), m_cipher(), m_isAuthenticated(false), m_isConnected(false), m_sessionKey(), m_protocol(std::move(protocol)){}
 
     template <typename T> 
     void ConnectionTpl<T>::connect(){
@@ -24,44 +25,40 @@ namespace seneca{
 
     }
 
-    template <typename T>
-    void ConnectionTpl<T>::authenticate(){
-        // secure connect to authenticate
-        if (!m_isConnected) {
-            return; 
-        }
-        
-        // if Already authenticated 
-        if (m_isAuthenticated) {
-            return;  
-        }
-        
-        // Send authentication credentials
-        std::string authRequest = "AUTH_REQUEST";  
-        m_socket.sendData(authRequest);
-        
-        //  Receive server response
-        std::string authResponse = m_socket.receiveData();
-        
-        //  Validate server response
-        if (authResponse.find("AUTH_OK: ") != 0) { 
-            return;  
-        }
-        
-        // Extract session key from response
-        std::string sessionKey = authResponse.substr(8);
-        
-        if (sessionKey.empty()) {
-            return; 
-        }
-        
-        //  onfigure cipher with session key
-        m_cipher.setKey(sessionKey);
-        
-        // Update state atomically (all three together)
-        m_sessionKey = sessionKey;
-        m_isAuthenticated = true;
 
+    template <typename T>
+    void ConnectionTpl<T>::authenticate(const std::string& authMessage) {
+
+        // Guard: must be connected first
+        if (!m_isConnected) {
+            throw std::logic_error(getName() + ": must be connected before authenticating.");
+        }
+
+        // Guard: don't re-authenticate
+        if (m_isAuthenticated) {
+            throw std::logic_error(getName() + ": already authenticated.");
+        }
+
+        // Transport: send the auth message VPNClient built
+        m_socket.sendData(authMessage);
+
+        // Transport: receive server response
+        std::string response = m_socket.receiveData();
+
+        // Protocol: validate and extract session key in one step
+        auto key = m_protocol->processAuthResponse(response);
+
+        // If nullopt  server rejected or response was malformed
+        if (!key) {
+            throw std::runtime_error(getName() + ": authentication failed or malformed response.");
+        }
+
+        // Cipher: configure with server-provided key
+        m_cipher.setKey(*key);
+
+        // Commit state atomically all three together or not at all
+        m_sessionKey      = *key;
+        m_isAuthenticated = true;
     }
 
     template <typename T>
@@ -100,7 +97,7 @@ namespace seneca{
         std::string plaintext = m_cipher.decrypt(encryptedData);
 
 
-        std::cout << plaintext << endl;
+        std::cout << plaintext << std::endl;
     }
 
     template <typename T>

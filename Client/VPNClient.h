@@ -52,6 +52,13 @@ namespace seneca{
         return new VPNClient<T>(this->m_username, this->m_password);
     }
 
+    
+    template<typename T> 
+    std::string VPNClinet<T>::buildCredentials()const{
+        return m_username + ":" + m_password;
+    }
+
+
 
 }
 #endif

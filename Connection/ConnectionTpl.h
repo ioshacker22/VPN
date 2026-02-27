@@ -1,6 +1,9 @@
 #include <string> 
 #include "Connection.h"
 #include "Socket.h"
+#include <memory>
+#include "Protocol.h"
+
 
 namespace seneca{
 
@@ -13,6 +16,10 @@ class ConnectionTpl : public Connection{
     bool m_isAuthenticated; 
     bool m_isConnected;
     std::string m_sessionKey;
+    std::unique_ptr<Protocol> m_protocol;
+
+    protected: 
+    virtual std::string buildCredentials() const = 0;
    
     
 
@@ -23,8 +30,9 @@ class ConnectionTpl : public Connection{
     // Cipher initialized but not keyed
     //  m_isAuthenticated = false
     //  m_sessionKey = empty
+    // m_protocol = move properties 
     // Network actions happen later via connect()
-    ConnectionTpl();
+    ConnectionTpl(std::unique_ptr<Protocol>protocol);
     void connect() override;
     void authenticate()override;
     void sendData(const std::string& )override;
