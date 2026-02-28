@@ -7,36 +7,32 @@
 namespace seneca{
 
     template <typename T>
-    ConnectionTpl<T>::ConnectionTpl(std::unique_ptr<Protocol>protocol) : m_socket(), m_cipher(), m_isAuthenticated(false), m_isConnected(false), m_sessionKey(), m_protocol(std::move(protocol)){}
+    ConnectionTpl<T>::ConnectionTpl(std::unique_ptr<Protocol>protocol) : m_socket(), m_cipher(), m_sessionKey(), m_protocol(std::move(protocol)), m_state(ConnectionState::Disconnected){}
 
     template <typename T> 
     void ConnectionTpl<T>::connect(){
         //check state to see if connected
-       if(m_isConnected){
-        return;
+       if(m_state != ConnectionState::Disconnected){
+          throw std::logic_error(getName() + ": already connected.");
        }
 
        //establish new connection
        m_socket.connect();
 
-       //flip connection on
-       m_isConnected = true;
+       //assign enum state
+       m_state = ConnectionState::Connected;
 
 
     }
+
 
 
     template <typename T>
     void ConnectionTpl<T>::authenticate() {
 
         // Guard: must be connected first
-        if (!m_isConnected) {
-            throw std::logic_error(getName() + ": must be connected before authenticating.");
-        }
-
-        // Guard: don't re-authenticate
-        if (m_isAuthenticated) {
-            throw std::logic_error(getName() + ": already authenticated.");
+        if (m_state != ConnectionState::Handshaken) {
+            throw std::logic_error(getName() + ":  handshake must complete before authenticating.");
         }
 
         // Identity: ask derived class for credentials
@@ -53,7 +49,7 @@ namespace seneca{
         auto key = m_protocol->processAuthResponse(response);
 
         if (!key) {
-            throw std::runtime_error(getName() + ": authentication failed or malformed response.");
+            throw std::runtime_error(getName() + ": authentication failed.");
         }
 
         // Cipher: configure with server-provided key
@@ -61,19 +57,14 @@ namespace seneca{
 
         // Commit state atomically
         m_sessionKey      = *key;
-        m_isAuthenticated = true;
+        m_state = ConnectionState::Authenticated;
     }
 
     template <typename T>
     void ConnectionTpl<T>::sendData(const std::string& plainText ){
         // must be authenticated
-        if(!m_isConnected){
-            return;
-        }
-
-        //Authenticate if not 
-        if(!m_isAuthenticated){
-            return;
+        if (m_state != ConnectionState::Authenticated) {
+            throw std::logic_error(getName() + ": must be authenticated before sending data.");
         }
 
         //Encrypt data
@@ -87,14 +78,10 @@ namespace seneca{
     template <typename T>
     void ConnectionTpl<T>::receiveData(){
         //secure connection
-        if(!m_isConnected){
-            return;
+        if (m_state != ConnectionState::Authenticated) {
+            throw std::logic_error(getName() + ": must be authenticated before receiving data.");
         }
 
-        //authenticate
-        if(!m_isAuthenticated){
-            return;
-        }
 
         std::string encryptedData = m_socket.receiveData();
         std::string plaintext = m_cipher.decrypt(encryptedData);
@@ -105,8 +92,9 @@ namespace seneca{
 
     template <typename T>
     void ConnectionTpl<T>::disconnect(){
+
         //disconnect 
-        if(!m_isConnected){
+        if(m_state == ConnectionState::Disconnected){
             return;
         }
 
@@ -114,10 +102,43 @@ namespace seneca{
         m_socket.disconnect();
 
         //clear session 
-        m_sessionKey = "";
-        m_isAuthenticated = false;
-        m_isConnected = false;
+        m_sessionKey.clear();
+        m_cipher = T{};
+        m_state = ConnectionState::Disconnected;
+    
 
+    }
+
+    template <typename T> 
+    void ConnectionTpl<T>::handshake(){
+
+        //connecttion must be established before handshake can begin
+        if(m_state != ConnectionState::Connected) {
+            throw std::logic_error(getName() + ": must be connected before handshake.");
+        }
+
+         // Guard: prevent handshake from running twice
+        if(m_state == ConnectionState::Handshaken) {
+            throw std::logic_error(getName() + ": handshake already completed.");
+        }
+
+
+        //builds opening message
+        std::string hello = m_protocol->createHandshake();
+
+        //send handshake opener to server
+        m_socket.sendData(hello);
+
+        //wait for server response
+        std::string response = m_socket.receiveData();
+
+        //validate server is ready to proceed
+        if(!m_protocol->validateHandshakeResponse(response)) {
+            throw std::runtime_error(getName() + ": handshake rejected by server.");
+        }
+
+        // Handshake complete — authenticate() is now permitted
+       m_state = ConnectionState::Handshaken;
     }
 
 
