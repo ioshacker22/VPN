@@ -28,6 +28,7 @@ namespace seneca{
 
         protected: 
         virtual Credentials buildCredentials() const = 0;
+        std::string getStateName() const;
        
 
     

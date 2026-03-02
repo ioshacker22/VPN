@@ -6,15 +6,35 @@
 
 namespace seneca{
 
+
+
+    //constructor: initializeds all members, starts in disconnected state
     template <typename T>
     ConnectionTpl<T>::ConnectionTpl(std::unique_ptr<Protocol>protocol) : m_socket(), m_cipher(), m_sessionKey(), m_protocol(std::move(protocol)), m_state(ConnectionState::Disconnected){}
+
+
+    //return state name for error message and debugging
+    template <typename T>
+    std::string ConnectionTpl<T>::getStateName() const{
+        switch (m_state){
+        case ConnectionState::Disconnected:
+            return "Disconnected";
+        case ConnectionState::Connected:
+            return "Connected";
+        case ConnectionState::Handshaken:
+            return "Handshaken";
+        case ConnectionState::Authenticated:
+            return "Authenticated";
+        }
+        return "Unknown";
+    }
 
     template <typename T> 
     void ConnectionTpl<T>::connect(){
         //check state to see if connected
        if(m_state != ConnectionState::Disconnected){
-          throw std::logic_error(getName() + ": already connected.");
-       }
+          throw std::logic_error(getName() + ": already connected. Current state: " + getStateName()
+        );
 
        //establish new connection
        m_socket.connect();
@@ -32,7 +52,7 @@ namespace seneca{
 
         // Guard: must be connected first
         if (m_state != ConnectionState::Handshaken) {
-            throw std::logic_error(getName() + ":  handshake must complete before authenticating.");
+            throw std::logic_error(getName() + ":  handshake must complete before authenticating." + getStateName() );
         }
 
         // Identity: ask derived class for credentials
@@ -49,7 +69,7 @@ namespace seneca{
         auto key = m_protocol->processAuthResponse(response);
 
         if (!key) {
-            throw std::runtime_error(getName() + ": authentication failed.");
+            throw std::runtime_error(getName() + ": authentication failed." + getStateName() );
         }
 
         // Cipher: configure with server-provided key
@@ -64,7 +84,7 @@ namespace seneca{
     void ConnectionTpl<T>::sendData(const std::string& plainText ){
         // must be authenticated
         if (m_state != ConnectionState::Authenticated) {
-            throw std::logic_error(getName() + ": must be authenticated before sending data.");
+            throw std::logic_error(getName() + ": must be authenticated before sending data." + getStateName() );
         }
 
         //Encrypt data
@@ -79,7 +99,7 @@ namespace seneca{
     void ConnectionTpl<T>::receiveData(){
         //secure connection
         if (m_state != ConnectionState::Authenticated) {
-            throw std::logic_error(getName() + ": must be authenticated before receiving data.");
+            throw std::logic_error(getName() + ": must be authenticated before receiving data." + getStateName() );
         }
 
 
@@ -114,12 +134,7 @@ namespace seneca{
 
         //connecttion must be established before handshake can begin
         if(m_state != ConnectionState::Connected) {
-            throw std::logic_error(getName() + ": must be connected before handshake.");
-        }
-
-         // Guard: prevent handshake from running twice
-        if(m_state == ConnectionState::Handshaken) {
-            throw std::logic_error(getName() + ": handshake already completed.");
+            throw std::logic_error(getName() + ": must be connected before handshake." + getStateName() );
         }
 
 
@@ -134,12 +149,13 @@ namespace seneca{
 
         //validate server is ready to proceed
         if(!m_protocol->validateHandshakeResponse(response)) {
-            throw std::runtime_error(getName() + ": handshake rejected by server.");
+            throw std::runtime_error(getName() + ": handshake rejected by server." + getStateName() );
         }
 
         // Handshake complete — authenticate() is now permitted
        m_state = ConnectionState::Handshaken;
     }
+
 
 
 
