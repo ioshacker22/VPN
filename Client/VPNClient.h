@@ -15,7 +15,6 @@ namespace seneca{
         VPNClient(const std::string& username, const std::string& password);
 
         //override methods
-        void authenticate()override;
         Connection* clone()override;
         ~VPNClient()override = default;
         std::string getName() const override;
@@ -25,27 +24,9 @@ namespace seneca{
     };
 
     template <typename T>
-    VPNClient<T>::VPNClient(const std::string& username, const std::string& password) : ConnectionTpl<T> (), m_username(username), m_password(password){}
+    VPNClient<T>::VPNClient(const std::string& username, const std::string& password) : ConnectionTpl<T> (std::make_unique<BasicProtocol>()), m_username(username), m_password(password){}
 
-    template <typename T>
-    void VPNClient<T>::authenticate(){
-        //secure connection
-        if(!this->m_isConnected){
-            return;
-        }
 
-        //authenticate
-        if(this->m_isAuthenticated){
-            return;
-        }
-
-        //send credentials
-        std::string credentials = m_username + ":" + m_password;
-       this->m_socket.sendData(credentials);
-
-       //delegate authentication
-       ConnectionTpl<T>::authenticate();
-    }
 
     //clone copies configuration only
     template <typename T>
@@ -53,12 +34,15 @@ namespace seneca{
         return new VPNClient<T>(this->m_username, this->m_password);
     }
 
+    template <typename T>
+    std::string VPNClient<T>::getName() const{
+        return m_username;
+    }
     //provvides credentials
    template <typename T>
     Credentials VPNClient<T>::buildCredentials() const {
         return Credentials{ m_username, m_password};
-    
-}
+    }
 
 
 }

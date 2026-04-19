@@ -1,3 +1,6 @@
+#ifndef SENECA_CONNECTIONTPL_H
+#define SENECA_CONNECTIONTPL_H
+
 #include <string> 
 #include "Connection.h"
 #include "Socket.h"
@@ -19,14 +22,14 @@ namespace seneca{
 
     template <typename T>
     class ConnectionTpl : public Connection{
-        protected:
+        private:
         Socket m_socket;
         T m_cipher;
         std::string m_sessionKey;
         std::unique_ptr<Protocol> m_protocol;
         ConnectionState m_state;
 
-        protected: 
+        protected:
         virtual Credentials buildCredentials() const = 0;
         std::string getStateName() const;
        
@@ -54,3 +57,4 @@ namespace seneca{
 };
 
 }
+#endif

@@ -33,15 +33,14 @@ namespace seneca{
     void ConnectionTpl<T>::connect(){
         //check state to see if connected
        if(m_state != ConnectionState::Disconnected){
-          throw std::logic_error(getName() + ": already connected. Current state: " + getStateName()
-        );
+          throw std::logic_error(getName() + ": already connected. Current state: " + getStateName());
+        }
 
        //establish new connection
        m_socket.connect();
 
        //assign enum state
        m_state = ConnectionState::Connected;
-
 
     }
 
@@ -130,7 +129,7 @@ namespace seneca{
     }
 
     template <typename T> 
-    void ConnectionTpl<T>::handshake(){
+    void ConnectionTpl<T>::handshake() const{
 
         //connecttion must be established before handshake can begin
         if(m_state != ConnectionState::Connected) {

@@ -161,27 +161,32 @@ namespace seneca{
         m_size++;
     }
 
-    void VPNServer::removeConnection(const std::string& username){
+   void VPNServer::removeConnection(const std::string& username){
         for(size_t i = 0; i < m_size; i++){
 
-            //downcast to VPNClient to access getName()
-            ConnectionTpl<AES>* client = dynamic_cast<ConnectionTpl<AES>*>(m_connections[i]);
-        
-            if(client != nullptr && client->getName() == username){
+            if(m_connections[i] != nullptr && m_connections[i]->getName() == username){
                 delete m_connections[i];
 
-                //shify connections after this one to the left
+                // shift left
                 for(size_t j = i; j < m_size - 1; j++){
-                    m_connections[j] = m_connections[j+1];
-
+                    m_connections[j] = m_connections[j + 1];
                 }
-                m_connections[m_size -1] = nullptr;
+
+                m_connections[m_size - 1] = nullptr;
                 m_size--;
-                return;  //stop afterremoving one connection
+                return;
             }
         }
     }
 
+    void VPNServer::broadcastEncryptedData(const std::string& data){
+        for(size_t i = 0; i < m_size; i++){
+            if(m_connections[i] != nullptr){
+               m_connections[i]->sendData(data);
+            }
+
+        }
+    }
 
 
 

@@ -9,16 +9,18 @@ class Connection{
 
     public: 
     virtual void connect() =0;
-    virtual void authenticate(const std::string& authMessage) = 0;
+    virtual void authenticate() = 0;
     virtual void sendData(const std::string& ) = 0;
     virtual void receiveData() = 0;
     virtual void disconnect() = 0;
     virtual ~Connection() = 0;
     virtual Connection* clone() = 0;
     virtual std::string getName()const = 0;
-
+    virtual void handshake() = 0;
+ 
 };
-Connection::~Connection(){};
+
+inline Connection::~Connection() {}
 
 }
 
