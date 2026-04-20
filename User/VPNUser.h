@@ -28,7 +28,7 @@ namespace seneca {
 
 
         public: 
-
+   
         VPNUser();
         bool login();
         void logout();
