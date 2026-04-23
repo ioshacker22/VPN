@@ -1,8 +1,7 @@
 
 # VPN Application — Systems Engineering Documentation
 
-**Author:** David  
-**Course:** C++ Object-Oriented Programming  
+**Author:** David Adebambo
 **Standard:** C++17  
 **Compiler:** g++ 10.2.0  
 **Last Updated:** April 2026
