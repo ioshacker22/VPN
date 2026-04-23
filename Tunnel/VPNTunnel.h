@@ -20,7 +20,7 @@ namespace seneca {
 
         //dataflow
         void sendPacket(Packet& packet);
-        Packet& receivePacket() const;
+        Packet receivePacket() const;
 
         //state query
         bool isOpen() const;

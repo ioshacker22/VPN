@@ -3,36 +3,57 @@
 #include "VPNClient.h"
 #include "AES.h"
 #include "BasicProtocol.h"
+#include "VPNTunnel.h"
+#include "Packet.h"
+using namespace seneca;
 
 int main(){
 
-    //create vpn server
+ // create vpn server
     VPNServer server;
-    std::cout << "VPN server created" <<std::endl;
+    std::cout << "[VPN] Server started" << std::endl;
 
-    //create vpn client
-    VPNClient<AES>* client = new VPNClient<AES>(
-        "David",
-        "password123"
-    );
+    // create vpn client
+    VPNClient<AES>* client = new VPNClient<AES>("David", "password123");
 
-    //attempt connection
+    // attempt connection
+    std::cout << "[VPN] Client attempting connection..." << std::endl;
     client->connect();
 
-    //Attempt handshake 
+    // handshake
     client->handshake();
 
-    //authenticate client 
+    // authenticate
     client->authenticate();
+    std::cout << "[AUTH] User authenticated" << std::endl;
 
-    //accept client on server side
+    // accept client on server
     server.acceptConnection(client);
 
-    //broadcast  data 
-    server.broadcastEncryptedData("Hello secured world");
+    // create tunnel using client's connection
+    VPNTunnel tunnel(client);   // assumes tunnel takes Connection*
 
-    //remove client
+    // open tunnel
+    tunnel.openTunnel();
+    std::cout << "[TUNNEL] Secure tunnel established" << std::endl;
+
+    // send data through tunnel
+    Packet packet("Hello secured world");
+    tunnel.sendPacket(packet);
+    std::cout << "[DATA] Encrypted packet sent" << std::endl;
+
+    // receive data
+    tunnel.receivePacket();
+    std::cout << "[DATA] Encrypted packet received" << std::endl;
+
+    // close tunnel
+    tunnel.closeTunnel();
+    std::cout << "[TUNNEL] Tunnel closed" << std::endl;
+
+    // remove client
     server.removeConnection("David");
+    std::cout << "[VPN] Client disconnected" << std::endl;
+
 
 
 

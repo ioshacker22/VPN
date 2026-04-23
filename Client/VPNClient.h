@@ -2,6 +2,7 @@
 #define SENECA_VPNCLIENT_H
 #include <string> 
 #include "ConnectionTpl.h"
+#include "BasicProtocol.h"
 
 namespace seneca{
 

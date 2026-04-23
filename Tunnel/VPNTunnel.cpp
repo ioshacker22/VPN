@@ -32,6 +32,19 @@ namespace seneca{
         m_connection->sendData(packet.getData());
     }
 
+    Packet VPNTunnel::receivePacket()const{
+        if(!m_isOpen){
+            throw std::logic_error("Tunnel cannot receive");
+        }
+
+        //receive darta from connection
+        std::string data =  m_connection->receiveData();
+
+      
+       return Packet(data);
+
+    }
+
     //returns state
     bool VPNTunnel::isOpen()const {
         return m_isOpen;

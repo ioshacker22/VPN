@@ -101,7 +101,7 @@ namespace seneca{
     }
 
     template <typename T>
-    void ConnectionTpl<T>::receiveData(){
+    std::string ConnectionTpl<T>::receiveData(){
         //secure connection
         if (m_state != ConnectionState::Authenticated) {
             throw std::logic_error(getName() + ": must be authenticated before receiving data." + getStateName() );
@@ -113,6 +113,8 @@ namespace seneca{
 
 
         std::cout << plaintext << std::endl;
+
+        return plaintext;
     }
 
     template <typename T>
@@ -135,7 +137,7 @@ namespace seneca{
     }
 
     template <typename T> 
-    void ConnectionTpl<T>::handshake() const{
+    void ConnectionTpl<T>::handshake() {
 
         //connecttion must be established before handshake can begin
         if(m_state != ConnectionState::Connected) {
@@ -153,8 +155,8 @@ namespace seneca{
         std::string response = m_socket.receiveData();
 
         //validate server is ready to proceed
-        if(!m_protocol->validateHandshakeResponse(response)) {
-            throw std::runtime_error(getName() + ": handshake rejected by server." + getStateName() );
+        if (response != "HELLO_ACK") {
+            throw std::runtime_error("Handshake failed: invalid response");
         }
 
         // Handshake complete — authenticate() is now permitted

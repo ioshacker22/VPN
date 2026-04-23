@@ -5,7 +5,7 @@
 #include "Connection.h"
 #include "Socket.h"
 #include <memory>
-#include "Protocol.h"
+#include "protocol.h"
 #include "Credentials.h"
 
 
@@ -49,7 +49,7 @@ namespace seneca{
         void connect() override;
         void authenticate()override;
         void sendData(const std::string& )override;
-        void receiveData() override;
+        std::string receiveData() override;
         void disconnect()override;
         void handshake() override;
 
@@ -57,4 +57,6 @@ namespace seneca{
 };
 
 }
+
+#include "ConnectionTpl.tpp"
 #endif

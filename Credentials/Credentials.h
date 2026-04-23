@@ -1,5 +1,3 @@
-// No dependencies.
-
 #ifndef SENECA_CREDENTIALS_H
 #define SENECA_CREDENTIALS_H
 

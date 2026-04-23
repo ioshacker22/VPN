@@ -45,11 +45,12 @@ namespace seneca{
         }
     }
 
-    VPNServer::VPNServer(VPNServer&& other) : m_connections (other.m_connections)
-        ,m_authDatabase(other.m_authDatabase)
-        ,m_capacity(other.m_capacity)
-        ,m_size(other.m_size)
-        ,m_authDatabaseSize(other.m_authDatabaseSize)
+    VPNServer::VPNServer(VPNServer&& other) 
+    : m_capacity(other.m_capacity),
+      m_size(other.m_size),
+      m_connections(other.m_connections),
+      m_authDatabase(other.m_authDatabase),
+      m_authDatabaseSize(other.m_authDatabaseSize)
     {
         other.m_connections = nullptr;
         other.m_authDatabase = nullptr;

@@ -1,5 +1,8 @@
 #include <string>
+#include <iostream>
 #include "VPNManager.h"
+#include "VPNClient.h"
+#include "AES.h"
 
 namespace seneca{
 

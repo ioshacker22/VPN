@@ -11,7 +11,7 @@ class Connection{
     virtual void connect() =0;
     virtual void authenticate() = 0;
     virtual void sendData(const std::string& ) = 0;
-    virtual void receiveData() = 0;
+    virtual std::string receiveData() = 0;
     virtual void disconnect() = 0;
     virtual ~Connection() = 0;
     virtual Connection* clone() = 0;
