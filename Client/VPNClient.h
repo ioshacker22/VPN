@@ -24,7 +24,8 @@ namespace seneca{
     };
 
     template <typename T>
-    VPNClient<T>::VPNClient(const std::string& username, const std::string& password) : ConnectionTpl<T> (std::make_unique<BasicProtocol>()), m_username(username), m_password(password){}
+    VPNClient<T>::VPNClient(const std::string& username, const std::string& password)
+     : ConnectionTpl<T> (std::make_unique<BasicProtocol>()), m_username(username.empty() ? throw std::invalid_argument("username cannot be empty") : username ), m_password(password){}
 
 
 

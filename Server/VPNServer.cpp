@@ -132,7 +132,7 @@ namespace seneca{
     
     void VPNServer::acceptConnection(Connection* c){
         if(c == nullptr){
-            return;
+            throw std::invalid_argument("nullptr rejected");
         }
         
         // Resize if at capacity

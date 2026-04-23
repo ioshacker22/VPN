@@ -75,7 +75,7 @@ namespace seneca{
         m_cipher.setKey(*key);
 
         // Commit state atomically
-        m_sessionKey      = *key;
+        m_sessionKey = *key;
         m_state = ConnectionState::Authenticated;
     }
 
@@ -85,6 +85,12 @@ namespace seneca{
         if (m_state != ConnectionState::Authenticated) {
             throw std::logic_error(getName() + ": must be authenticated before sending data." + getStateName() );
         }
+
+        //empty data check
+        if(plainText.empty()){
+            throw std::invalid_argument("cannot send empty data");
+        }
+
 
         //Encrypt data
         std::string encryptedData = m_cipher.encrypt(plainText);
