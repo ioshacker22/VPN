@@ -52,43 +52,10 @@ All code lives inside the `seneca` namespace.
 ## System Architecture
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                    VPNManager                        │
-│         (High-level system orchestrator)             │
-└────────────────────┬────────────────────────────────┘
-                     │ owns
-┌────────────────────▼────────────────────────────────┐
-│                    VPNServer                         │
-│         (Manages multiple connections)               │
-│         Dynamic array of Connection*                 │
-└────────────────────┬────────────────────────────────┘
-                     │ stores (via Connection*)
-┌────────────────────▼────────────────────────────────┐
-│               ConnectionTpl<T>                       │
-│         (Templated connection implementation)        │
-│         T = cipher strategy (e.g. AES)              │
-└──────┬──────────────┬──────────────┬────────────────┘
-       │              │              │
-  ┌────▼───┐   ┌──────▼──────┐  ┌───▼────────────┐
-  │ Socket │   │  T (Cipher) │  │    Protocol    │
-  │  I/O   │   │  Encryption │  │  (Strategy)    │
-  └────────┘   └─────────────┘  └────────────────┘
-       ▲
-┌──────┴──────────────────────────────────────────────┐
-│                   VPNClient<T>                       │
-│         (Concrete client with credentials)           │
-└─────────────────────────────────────────────────────┘
+<img width="2664" height="3374" alt="373CC692-611E-4E62-9BAA-9D270DB81496_1_201_a" src="https://github.com/user-attachments/assets/6138fee1-343c-451e-98be-aa93ad32c035" />
 
-┌─────────────────────────────────────────────────────┐
-│                   VPNTunnel                          │
-│         (Secure data tunnel wrapper)                 │
-│         Wraps a Connection* for packet routing       │
-└─────────────────────────────────────────────────────┘
 
-┌─────────────────────────────────────────────────────┐
-│                    VPNUser                           │
-│         (Authenticated user with access level)       │
-└─────────────────────────────────────────────────────┘
+
 ```
 
 ---
