@@ -51,12 +51,10 @@ All code lives inside the `seneca` namespace.
 
 ## System Architecture
 
-```
-<img width="2664" height="3374" alt="373CC692-611E-4E62-9BAA-9D270DB81496_1_201_a" src="https://github.com/user-attachments/assets/6138fee1-343c-451e-98be-aa93ad32c035" />
+
+<img width="3374" height="2664" alt="373CC692-611E-4E62-9BAA-9D270DB81496_1_201_a (1)" src="https://github.com/user-attachments/assets/9e4b3277-f320-40ba-ac81-a4790f5b3b66" />
 
 
-
-```
 
 ---
 
