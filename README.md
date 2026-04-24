@@ -519,7 +519,7 @@ void test_example() {
 
 ## Build Instructions
 
-### Compile (Matrix)
+### Compile
 ```bash
 /usr/local/gcc/10.2.0/bin/g++ -Wall -std=c++17 -g -o vpn \
   -I./AES -I./Client -I./Connection \
